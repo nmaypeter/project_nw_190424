@@ -291,7 +291,7 @@ class Evaluation:
         self.wpiwp = wpiwp
 
     def setPersonalPurchasingProbList(self, w_list):
-        # -- according to pps, initialize the ppp_list --
+        # -- according to ppp, initialize the ppp_list --
         # -- if the node i can't purchase the product k, then ppp_list[k][i] = 0 --
         ### ppp_list: (list) the list of personal purchasing prob. for all combinations of nodes and products
         ### ppp_list[k]: (list) the list of personal purchasing prob. for k-product
