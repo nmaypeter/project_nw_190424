@@ -228,7 +228,7 @@ if __name__ == '__main__':
             for prod_setting2 in prod2_seq:
                 product_name = 'item_lphc' * (prod_setting == 1) + 'item_hplc' * (prod_setting == 2) + '_ce' * (prod_setting2 == 2) + '_ee' * (prod_setting2 == 3)
                 for cm in cm_seq:
-                    cas_model = 'ic' * (cm == 1) + 'wc' * (cm == 2)
+                    cascade_model = 'ic' * (cm == 1) + 'wc' * (cm == 2)
                     for wallet_distribution in wallet_distribution_seq:
                         wallet_distribution_name = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
 
