@@ -4,7 +4,7 @@ import time
 
 class IniGraph:
     def __init__(self, data_name):
-        ### data_set_name, data_data_path, data_weight_path, data_degree_path: (str)
+        ### dataset_name, data_data_path, data_weight_path, data_degree_path: (str)
         self.data_name = data_name
         self.data_data_path = 'data/' + data_name + '/data.txt'
         self.data_ic_weight_path = 'data/' + data_name + '/weight_ic.txt'
@@ -159,7 +159,7 @@ class IniProduct:
 
 class IniWallet:
     def __init__(self, data_name, prod_name, wallet_dist_name):
-        ### data_set_name: (str)
+        ### dataset_name: (str)
         self.data_name = data_name
         self.prod_name = prod_name
         self.wallet_dist_name = wallet_dist_name
