@@ -35,8 +35,8 @@ class SeedSelectionRandom:
 
 if __name__ == '__main__':
     dataset_name = 'email_undirected'
-    product_name = 'item_lphc'
     cascade_model = 'ic'
+    product_name = 'item_lphc'
     wallet_distribution_name = 'm50e25'
     total_budget = 10
     whether_passing_information_with_purchasing = bool(1)
