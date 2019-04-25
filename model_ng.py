@@ -21,7 +21,7 @@ if __name__ == '__main__':
                 for prod_setting2 in prod2_seq:
                     product_name = 'item_lphc' * (prod_setting == 1) + 'item_hplc' * (prod_setting == 2) + '_ce' * (prod_setting2 == 2) + '_ee' * (prod_setting2 == 3)
                     for wallet_distribution in wallet_distribution_seq:
-                        wallet_distribution_name = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
+                        wallet_distribution_type = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
                         for wpiwp in wpiwp_seq:
 
                             iniG = IniGraph(dataset_name)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                                 while len(temp_sequence) != 0:
                                     ss_strat_time = time.time()
                                     [begin_budget, now_budget, now_profit, seed_set, celf_sequence, ss_acc_time] = temp_sequence.pop(0)
-                                    print('@ mngic seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_name) + ', wpiwp = ' + str(wpiwp) +
+                                    print('@ mngic seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
                                           ', product_name = ' + product_name + ', budget = ' + str(begin_budget) + ', sample_count = ' + str(sample_count))
                                     mep_g = celf_sequence.pop(0)
                                     mep_k_prod, mep_i_node, mep_flag = mep_g[0], mep_g[1], mep_g[3]
@@ -117,13 +117,13 @@ if __name__ == '__main__':
                                     avg_pro_k, avg_bud_k = [0.0 for _ in range(num_product)], [0.0 for _ in range(num_product)]
 
                                     eva_main = Evaluation(graph_dict, seed_cost_dict, product_list, ppp, wpiwp)
-                                    iniW = IniWallet(dataset_name, product_name, wallet_distribution_name)
+                                    iniW = IniWallet(dataset_name, product_name, wallet_distribution_type)
                                     wallet_list = iniW.getWalletList()
                                     personal_prob_list = eva_main.setPersonalPurchasingProbList(wallet_list)
                                     for sample_count, sample_seed_set in enumerate(seed_set_sequence[bud - 1]):
                                         if sample_seed_set != 0:
-                                            print('@ mngic evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_name + ', wpiwp = ' + str(wpiwp) +
-                                                  ', product_name = ' + product_name + ', budget = ' + str(bud) + ', ppp = ' + str(ppp) + ', sample_count = ' + str(sample_count))
+                                            print('@ mngic evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) +
+                                                  ', product_name = ' + product_name + ', budget = ' + str(bud) + ', ppp = ' + ppp_strategy + ', sample_count = ' + str(sample_count))
                                             sample_pro_acc, sample_bud_acc = 0.0, 0.0
                                             sample_sn_k_acc, sample_pnn_k_acc = [0.0 for _ in range(num_product)], [0 for _ in range(num_product)]
                                             sample_pro_k_acc, sample_bud_k_acc = [0.0 for _ in range(num_product)], [0.0 for _ in range(num_product)]
@@ -170,14 +170,14 @@ if __name__ == '__main__':
                                         avg_bud_k[kk] = round(avg_bud_k[kk] / sample_number, 2)
 
                                     total_time = round(sum(ss_time_sequence[bud - 1]), 2)
-                                    path1 = 'result/mngic_' + wallet_distribution_name + '_' + ppp_strategy + '_wpiwp' * wpiwp
+                                    path1 = 'result/mngic_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp
                                     if not os.path.isdir(path1):
                                         os.mkdir(path1)
-                                    path = 'result/mngic_' + wallet_distribution_name + '_' + ppp_strategy + '_wpiwp' * wpiwp + '/' + dataset_name + '_' + cascade_model + '_' + product_name
+                                    path = 'result/mngic_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp + '/' + dataset_name + '_' + cascade_model + '_' + product_name
                                     if not os.path.isdir(path):
                                         os.mkdir(path)
                                     fw = open(path + '/b' + str(bud) + '_i' + str(sample_number) + '.txt', 'w')
-                                    fw.write('mngic, ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_name + ', wpiwp = ' + str(wpiwp) + '\n' +
+                                    fw.write('mngic, ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) + '\n' +
                                              'dataset_name = ' + dataset_name + '_' + cascade_model + ', product_name = ' + product_name + '\n' +
                                              'total_budget = ' + str(bud) + ', sample_count = ' + str(sample_number) + '\n' +
                                              'avg_profit = ' + str(avg_pro) + ', avg_budget = ' + str(avg_bud) + '\n' +
