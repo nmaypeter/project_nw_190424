@@ -158,11 +158,12 @@ class IniProduct:
 
 
 class IniWallet:
-    def __init__(self, data_name, prod_name, wallet_dist_name):
+    def __init__(self, data_name, prod_name, wallet_dist_type):
         ### dataset_name: (str)
         self.data_name = data_name
         self.prod_name = prod_name
-        self.wallet_dist_name = wallet_dist_name
+        self.wallet_dist_type = wallet_dist_type
+        self.wallet_dist_name = 'wallet_' + prod_name.split('_')[1] + '_' + wallet_dist_type
 
     def setNodeWallet(self, num_node):
         # -- set node's personal budget (wallet) --
@@ -174,14 +175,14 @@ class IniWallet:
         f.close()
 
         mu, sigma = 0, 1
-        if self.wallet_dist_name == 'm50e25':
+        if self.wallet_dist_type == 'm50e25':
             mu = np.mean(price_list)
             sigma = (max(price_list) - mu) / 0.6745
-        elif self.wallet_dist_name == 'm99e96':
+        elif self.wallet_dist_type == 'm99e96':
             mu = sum(price_list)
             sigma = abs(min(price_list) - mu) / 3
 
-        fw = open('data/' + self.data_name + '/' + self.prod_name.replace('item', 'wallet') + '_' + str(self.wallet_dist_name) + '.txt', 'w')
+        fw = open('data/' + self.data_name + '/' + self.wallet_dist_name + '.txt', 'w')
         for i in range(0, num_node + 1):
             wal = 0
             while wal <= 0:
@@ -194,7 +195,7 @@ class IniWallet:
     def getWalletList(self):
         # -- get wallet_list from file --
         w_list = []
-        with open('data/' + self.data_name + '/' + self.prod_name.replace('item', 'wallet') + '_' + str(self.wallet_dist_name) + '.txt') as f:
+        with open('data/' + self.data_name + '/' + self.wallet_dist_name + '.txt') as f:
             for line in f:
                 (node, wal) = line.split()
                 w_list.append(float(wal))
@@ -205,12 +206,12 @@ class IniWallet:
     def getTotalWallet(self):
         # -- get total_wallet from file --
         total_w = 0.0
-        with open('data/' + self.data_name + '/' + self.prod_name.replace('item', 'wallet') + '_' + str(self.wallet_dist_name) + '.txt') as f:
+        with open('data/' + self.data_name + '/' + self.wallet_dist_name + '.txt') as f:
             for line in f:
                 (node, wallet) = line.split()
                 total_w += float(wallet)
         f.close()
-        print('total wallet = ' + self.prod_name + '_dis' + str(self.wallet_dist_name) + ' = ' + str(round(total_w, 2)))
+        print('total wallet = ' + self.wallet_dist_name + ' = ' + str(round(total_w, 2)))
 
         return total_w
 
@@ -230,19 +231,19 @@ if __name__ == '__main__':
                 for cm in cm_seq:
                     cascade_model = 'ic' * (cm == 1) + 'wc' * (cm == 2)
                     for wallet_distribution in wallet_distribution_seq:
-                        wallet_distribution_name = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
+                        wallet_distribution_type = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
 
                         iniG = IniGraph(dataset_name)
                         iniP = IniProduct(product_name)
-                        iniW = IniWallet(dataset_name, product_name, wallet_distribution_name)
+                        iniW = IniWallet(dataset_name, product_name, wallet_distribution_type)
 
                         # iniG.setEdgeWeight()
-                        number_node = iniG.getTotalNumNode()
+                        # number_node = iniG.getTotalNumNode()
                         # number_edge = iniG.getTotalNumEdge()
                         # max_degree = iniG.getMaxDegree()
 
                         # sum_price = iniP.getTotalPrice()
-                        iniW.setNodeWallet(number_node)
+                        # iniW.setNodeWallet(number_node)
 
                         # seed_cost_dict = iniG.constructSeedCostDict()
                         # graph_dict = iniG.constructGraphDict(cascade_model)
@@ -280,12 +281,12 @@ if __name__ == '__main__':
 
     ### -- total wallet --
     ### -- email_undirected --
-    ### -- item_lphc_dism50e25 = 612.39 --
-    ### -- item_lphc_dism99e96 = 1612.21 --
-    ### -- item_hplc_dism50e25 = 610.77 --
-    ### -- item_hplc_dism99e96 = 1618.81 --
+    ### -- wallet_lphc_m50e25 = 612.39 --
+    ### -- wallet_lphc_m99e96 = 1612.21 --
+    ### -- wallet_hplc_m50e25 = 610.77 --
+    ### -- wallet_hplc_m99e96 = 1618.81 --
     ### -- dnc_email_directed --
-    ### -- item_lphc_dism50e25 = 1101.13 --
-    ### -- item_lphc_dism99e96 = 2909.05 --
-    ### -- item_hplc_dism50e25 = 1088.12 --
-    ### -- item_hplc_dism99e96 = 2944.66 --
+    ### -- wallet_lphc_m50e25 = 1101.13 --
+    ### -- wallet_lphc_m99e96 = 2909.05 --
+    ### -- wallet_hplc_m50e25 = 1088.12 --
+    ### -- wallet_hplc_m99e96 = 2944.66 --
