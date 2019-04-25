@@ -44,7 +44,7 @@ if __name__ == '__main__':
     dataset_name = 'email_undirected'
     cascade_model = 'ic'
     product_name = 'item_lphc'
-    wallet_distribution_name = 'm50e25'
+    wallet_distribution_type = 'm50e25'
     total_budget = 10
     whether_passing_information_with_purchasing = bool(1)
     personal_purchasing_prob = 'random'
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     print('seed selection time: ' + str(round(time.time() - start_time, 2)) + 'sec')
     eva = Evaluation(graph_dict, seed_cost_dict, product_list, personal_purchasing_prob, whether_passing_information_with_purchasing)
-    iniW = IniWallet(dataset_name, product_name, wallet_distribution_name)
+    iniW = IniWallet(dataset_name, product_name, wallet_distribution_type)
     wallet_list = iniW.getWalletList()
     personal_prob_list = eva.setPersonalPurchasingProbList(wallet_list)
 
