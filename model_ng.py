@@ -1,7 +1,6 @@
 from SeedSelection_NaiveGreedy import *
 import os
 
-
 if __name__ == '__main__':
     dataset_seq = [2]
     prod_seq, prod2_seq = [1, 2], [1, 2, 3]
@@ -47,7 +46,7 @@ if __name__ == '__main__':
                                 while len(temp_sequence) != 0:
                                     ss_strat_time = time.time()
                                     [begin_budget, now_budget, now_profit, seed_set, celf_sequence, ss_acc_time] = temp_sequence.pop(0)
-                                    print('@ mngic seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
+                                    print('@ mng seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
                                           ', product_name = ' + product_name + ', budget = ' + str(begin_budget) + ', sample_count = ' + str(sample_count))
                                     mep_g = celf_sequence.pop(0)
                                     mep_k_prod, mep_i_node, mep_flag = mep_g[0], mep_g[1], mep_g[3]
@@ -58,7 +57,7 @@ if __name__ == '__main__':
                                             ss_time = round(time.time() - ss_strat_time + ss_acc_time, 2)
                                             temp_celf_sequence = copy.deepcopy(celf_sequence)
                                             temp_celf_sequence.insert(0, mep_g)
-                                            temp_sequence.append([begin_budget + 1, now_budget, now_profit, copy.deepcopy(seed_set), copy.deepcopy(temp_celf_sequence), ss_time])
+                                            temp_sequence.append([begin_budget + 1, now_budget, now_profit, copy.deepcopy(seed_set), temp_celf_sequence, ss_time])
 
                                         if now_budget + sc > begin_budget:
                                             mep_g = celf_sequence.pop(0)
@@ -122,7 +121,7 @@ if __name__ == '__main__':
                                     personal_prob_list = eva_main.setPersonalPurchasingProbList(wallet_list)
                                     for sample_count, sample_seed_set in enumerate(seed_set_sequence[bud - 1]):
                                         if sample_seed_set != 0:
-                                            print('@ mngic evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) +
+                                            print('@ mng evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) +
                                                   ', product_name = ' + product_name + ', budget = ' + str(bud) + ', ppp = ' + ppp_strategy + ', sample_count = ' + str(sample_count))
                                             sample_pro_acc, sample_bud_acc = 0.0, 0.0
                                             sample_sn_k_acc, sample_pnn_k_acc = [0.0 for _ in range(num_product)], [0 for _ in range(num_product)]
@@ -170,14 +169,14 @@ if __name__ == '__main__':
                                         avg_bud_k[kk] = round(avg_bud_k[kk] / sample_number, 2)
 
                                     total_time = round(sum(ss_time_sequence[bud - 1]), 2)
-                                    path1 = 'result/mngic_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp
+                                    path1 = 'result/mng_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp
                                     if not os.path.isdir(path1):
                                         os.mkdir(path1)
-                                    path = 'result/mngic_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp + '/' + dataset_name + '_' + cascade_model + '_' + product_name
+                                    path = 'result/mng_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp + '/' + dataset_name + '_' + cascade_model + '_' + product_name
                                     if not os.path.isdir(path):
                                         os.mkdir(path)
                                     fw = open(path + '/b' + str(bud) + '_i' + str(sample_number) + '.txt', 'w')
-                                    fw.write('mngic, ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) + '\n' +
+                                    fw.write('ng, ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) + '\n' +
                                              'dataset_name = ' + dataset_name + '_' + cascade_model + ', product_name = ' + product_name + '\n' +
                                              'total_budget = ' + str(bud) + ', sample_count = ' + str(sample_number) + '\n' +
                                              'avg_profit = ' + str(avg_pro) + ', avg_budget = ' + str(avg_bud) + '\n' +
