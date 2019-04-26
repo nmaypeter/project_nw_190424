@@ -12,7 +12,7 @@ def selectDegreeSeed(d_dict):
                     max_degree = int(deg)
 
             if max_degree == -1:
-                return mep, d_dict
+                return mep
 
             if d_dict[str(max_degree)] == set():
                 del d_dict[str(max_degree)]
