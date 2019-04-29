@@ -129,9 +129,7 @@ if __name__ == '__main__':
     print('seed selection time: ' + str(round(time.time() - start_time, 2)) + 'sec')
     while not operator.eq(bud_index, bud_bound_index):
         ### bud_pmis: (float) the budget in this pmis execution
-        bud_pmis = 0.0
-        for kk in range(num_product):
-            bud_pmis += c_matrix[kk][bud_index[kk]]
+        bud_pmis = sum(c_matrix[kk][bud_index[kk]] for kk in range(num_product))
 
         if bud_pmis <= total_budget:
             temp_bound_flag = 0
