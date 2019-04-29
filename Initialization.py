@@ -219,17 +219,17 @@ class IniWallet:
 if __name__ == '__main__':
     start_time = time.time()
     dataset_seq = [1, 2]
-    prod_seq, prod2_seq = [1, 2], [1]
     cm_seq = [1]
+    prod_seq, prod2_seq = [1, 2], [1]
     wallet_distribution_seq = [1, 2]
     for data_setting in dataset_seq:
         dataset_name = 'email_undirected' * (data_setting == 1) + 'dnc_email_directed' * (data_setting == 2) + 'email_Eu_core_directed' * (data_setting == 3) + \
                        'WikiVote_directed' * (data_setting == 4) + 'NetPHY_undirected' * (data_setting == 5)
-        for prod_setting in prod_seq:
-            for prod_setting2 in prod2_seq:
-                product_name = 'item_lphc' * (prod_setting == 1) + 'item_hplc' * (prod_setting == 2) + '_ce' * (prod_setting2 == 2) + '_ee' * (prod_setting2 == 3)
-                for cm in cm_seq:
-                    cascade_model = 'ic' * (cm == 1) + 'wc' * (cm == 2)
+        for cm in cm_seq:
+            cascade_model = 'ic' * (cm == 1) + 'wc' * (cm == 2)
+            for prod_setting in prod_seq:
+                for prod_setting2 in prod2_seq:
+                    product_name = 'item_lphc' * (prod_setting == 1) + 'item_hplc' * (prod_setting == 2) + '_ce' * (prod_setting2 == 2) + '_ee' * (prod_setting2 == 3)
                     for wallet_distribution in wallet_distribution_seq:
                         wallet_distribution_type = 'm50e25' * (wallet_distribution == 1) + 'm99e96' * (wallet_distribution == 2)
 
