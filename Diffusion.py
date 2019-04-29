@@ -446,7 +446,7 @@ class Evaluation:
                             a_e_set[k_prod_t][i_node_t] = {out}
 
         for k in range(self.num_product):
-            pro_k_list[k] = round(pro_k_list[k], 2)
+            pro_k_list[k] = round(pro_k_list[k], 4)
             pnn_k_list[k] = round(len(customer_set[k]), 2)
 
-        return round(ep, 2), pro_k_list, pnn_k_list
+        return round(ep, 4), pro_k_list, pnn_k_list
