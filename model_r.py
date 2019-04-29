@@ -52,13 +52,13 @@ if __name__ == '__main__':
 
                                     while now_budget < begin_budget and mep_i_node != '-1':
                                         sc = seed_cost_dict[mep_i_node]
-                                        if now_budget + sc >= begin_budget and begin_budget < total_budget and len(temp_sequence) == 0:
+                                        if round(now_budget + sc, 2) >= begin_budget and begin_budget < total_budget and len(temp_sequence) == 0:
                                             ss_time = round(time.time() - ss_strat_time + ss_acc_time, 2)
                                             temp_random_node_set = copy.deepcopy(random_node_set)
                                             temp_random_node_set.add((mep_k_prod, mep_i_node))
                                             temp_sequence.append([begin_budget + 1, now_budget, copy.deepcopy(seed_set), temp_random_node_set, ss_time])
 
-                                        if now_budget + sc > begin_budget:
+                                        if round(now_budget + sc, 2) >= begin_budget > begin_budget:
                                             mep_g = selectRandomSeed(random_node_set)
                                             mep_k_prod, mep_i_node = mep_g[0], mep_g[1]
                                             if mep_i_node == '-1':
