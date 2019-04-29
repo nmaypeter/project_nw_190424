@@ -2,13 +2,14 @@ from SeedSelection_NGAP import *
 import os
 
 if __name__ == '__main__':
+    model_name = 'mngapsr'
     dataset_seq = [2]
     prod_seq, prod2_seq = [1, 2], [1, 2, 3]
     cm_seq = [1, 2]
     wallet_distribution_seq = [1, 2]
     total_budget = 10
     wpiwp_seq = [bool(1), bool(0)]
-    sample_number = 10
+    sample_number = 1
     ppp_seq = [1, 2, 3]
     eva_monte_carlo = 100
     for data_setting in dataset_seq:
@@ -47,7 +48,7 @@ if __name__ == '__main__':
                                 while len(temp_sequence) != 0:
                                     ss_strat_time = time.time()
                                     [begin_budget, now_budget, now_profit, seed_set, expected_profit_k, celf_sequence, ss_acc_time] = temp_sequence.pop(0)
-                                    print('@ mngapsr seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
+                                    print('@ seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
                                           ', product_name = ' + product_name + ', budget = ' + str(begin_budget) + ', sample_count = ' + str(sample_count))
                                     mep_g = celf_sequence.pop(0)
                                     mep_k_prod, mep_i_node, mep_ratio, mep_flag = mep_g
@@ -122,9 +123,6 @@ if __name__ == '__main__':
                                 for ppp in ppp_seq:
                                     ppp_strategy = 'random' * (ppp == 1) + 'expensive' * (ppp == 2) + 'cheap' * (ppp == 3)
                                     pps_start_time = time.time()
-                                    avg_pro, avg_bud = 0.0, 0.0
-                                    avg_sn_k, avg_pnn_k = [0 for _ in range(num_product)], [0 for _ in range(num_product)]
-                                    avg_pro_k, avg_bud_k = [0.0 for _ in range(num_product)], [0.0 for _ in range(num_product)]
 
                                     eva_main = Evaluation(graph_dict, seed_cost_dict, product_list, ppp, wpiwp)
                                     iniW = IniWallet(dataset_name, product_name, wallet_distribution_type)
@@ -132,7 +130,7 @@ if __name__ == '__main__':
                                     personal_prob_list = eva_main.setPersonalPurchasingProbList(wallet_list)
                                     for sample_count, sample_seed_set in enumerate(seed_set_sequence[bud - 1]):
                                         if sample_seed_set != 0:
-                                            print('@ mngapsr evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) +
+                                            print('@ evaluation @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) +
                                                   ', product_name = ' + product_name + ', budget = ' + str(bud) + ', ppp = ' + ppp_strategy + ', sample_count = ' + str(sample_count))
                                             sample_pro_acc, sample_bud_acc = 0.0, 0.0
                                             sample_sn_k_acc, sample_pnn_k_acc = [0.0 for _ in range(num_product)], [0 for _ in range(num_product)]
@@ -150,26 +148,29 @@ if __name__ == '__main__':
                                                 sample_pnn_k_acc[kk] = round(sample_pnn_k_acc[kk] / eva_monte_carlo, 2)
                                                 sample_sn_k_acc[kk] = len(sample_seed_set[kk])
                                                 for sample_seed in sample_seed_set[kk]:
-                                                    sample_bud_acc += seed_cost_dict[sample_seed]
-                                                    sample_bud_k_acc[kk] += seed_cost_dict[sample_seed]
-                                                    sample_bud_acc = round(sample_bud_acc, 2)
-                                                    sample_bud_k_acc[kk] = round(sample_bud_k_acc[kk], 2)
+                                                    sample_bud_acc = round(sample_bud_acc + seed_cost_dict[sample_seed], 2)
+                                                    sample_bud_k_acc[kk] = round(sample_bud_k_acc[kk] + seed_cost_dict[sample_seed], 2)
 
-                                            result[bud - 1][ppp - 1].append([sample_pro_acc, sample_bud_acc, sample_sn_k_acc, sample_pnn_k_acc, sample_seed_set])
-                                            avg_pro += sample_pro_acc
-                                            avg_bud += sample_bud_acc
-                                            for kk in range(num_product):
-                                                avg_sn_k[kk] += sample_sn_k_acc[kk]
-                                                avg_pnn_k[kk] += sample_pnn_k_acc[kk]
-                                                avg_pro_k[kk] += sample_pro_k_acc[kk]
-                                                avg_bud_k[kk] += sample_bud_k_acc[kk]
+                                            result[bud - 1][ppp - 1].append([sample_pro_acc, sample_bud_acc, sample_sn_k_acc, sample_pnn_k_acc, sample_pro_k_acc, sample_bud_k_acc, sample_seed_set])
 
                                             print('eva_time = ' + str(round(time.time() - eva_start_time, 2)) + 'sec')
                                             print(result[bud - 1][ppp - 1][sample_count])
-                                            print('avg_profit = ' + str(round(avg_pro / (sample_count + 1), 4)) + ', avg_budget = ' + str(round(avg_bud / (sample_count + 1), 4)))
                                             print('------------------------------------------')
                                         else:
                                             result[bud - 1][ppp - 1].append(result[bud - 2][ppp - 1][sample_count])
+
+                                    avg_pro, avg_bud = 0.0, 0.0
+                                    avg_sn_k, avg_pnn_k = [0 for _ in range(num_product)], [0 for _ in range(num_product)]
+                                    avg_pro_k, avg_bud_k = [0.0 for _ in range(num_product)], [0.0 for _ in range(num_product)]
+
+                                    for r in result[bud - 1][ppp - 1]:
+                                        avg_pro += r[0]
+                                        avg_bud += r[1]
+                                        for kk in range(num_product):
+                                            avg_sn_k[kk] += r[2][kk]
+                                            avg_pnn_k[kk] += r[3][kk]
+                                            avg_pro_k[kk] += r[4][kk]
+                                            avg_bud_k[kk] += r[5][kk]
 
                                     avg_pro = round(avg_pro / sample_number, 4)
                                     avg_bud = round(avg_bud / sample_number, 2)
@@ -180,14 +181,14 @@ if __name__ == '__main__':
                                         avg_bud_k[kk] = round(avg_bud_k[kk] / sample_number, 2)
 
                                     total_time = round(sum(ss_time_sequence[bud - 1]), 2)
-                                    path1 = 'result/mngapsr_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp
+                                    path1 = 'result/' + model_name + '_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp
                                     if not os.path.isdir(path1):
                                         os.mkdir(path1)
-                                    path = 'result/mngapsr_' + wallet_distribution_type + '_ppp' + str(ppp) + '_wpiwp' * wpiwp + '/' + dataset_name + '_' + cascade_model + '_' + product_name
+                                    path = path1 + '/' + dataset_name + '_' + cascade_model + '_' + product_name
                                     if not os.path.isdir(path):
                                         os.mkdir(path)
                                     fw = open(path + '/b' + str(bud) + '_i' + str(sample_number) + '.txt', 'w')
-                                    fw.write('ngapsr, ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) + '\n' +
+                                    fw.write(model_name + ', ppp = ' + str(ppp) + ', total_budget = ' + str(bud) + ', dist = ' + wallet_distribution_type + ', wpiwp = ' + str(wpiwp) + '\n' +
                                              'dataset_name = ' + dataset_name + '_' + cascade_model + ', product_name = ' + product_name + '\n' +
                                              'total_budget = ' + str(bud) + ', sample_count = ' + str(sample_number) + '\n' +
                                              'avg_profit = ' + str(avg_pro) + ', avg_budget = ' + str(avg_bud) + '\n' +
@@ -207,5 +208,5 @@ if __name__ == '__main__':
                                     fw.write('\n')
 
                                     for t, r in enumerate(result[bud - 1][ppp - 1]):
-                                        fw.write('\n' + str(t) + '\t' + str(round(r[0], 4)) + '\t' + str(round(r[1], 4)) + '\t' + str(r[2]) + '\t' + str(r[3]) + '\t' + str(r[4]))
+                                        fw.write('\n' + str(t) + '\t' + str(round(r[0], 4)) + '\t' + str(round(r[1], 4)) + '\t' + str(r[2]) + '\t' + str(r[3]) + '\t' + str(r[4]) + '\t' + str(r[5]) + '\t' + str(r[6]))
                                     fw.close()
