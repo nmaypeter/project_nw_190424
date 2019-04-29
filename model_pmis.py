@@ -51,7 +51,7 @@ if __name__ == '__main__':
                                     print('@ seed selection @ dataset_name = ' + dataset_name + '_' + cascade_model + ', dist = ' + str(wallet_distribution_type) + ', wpiwp = ' + str(wpiwp) +
                                           ', product_name = ' + product_name + ', budget = ' + str(begin_budget) + ', sample_count = ' + str(sample_count))
 
-                                    mep = celf_sequence.pop(0)
+                                    mep_g = celf_sequence.pop(0)
                                     mep_k_prod, mep_i_node, mep_flag = mep_g[0], mep_g[1], mep_g[3]
 
                                     while cur_budget < begin_budget and mep_i_node != '-1':
@@ -64,11 +64,11 @@ if __name__ == '__main__':
                                             temp_sequence[3] = copy.deepcopy(s_matrix)
                                             temp_sequence[4] = copy.deepcopy(c_matrix)
                                             temp_celf_sequence = copy.deepcopy(celf_sequence)
-                                            temp_celf_sequence.insert(0, mep)
+                                            temp_celf_sequence.insert(0, mep_g)
                                             temp_sequence[5] = temp_celf_sequence
 
                                         if round(cur_budget + sc, 2) > begin_budget:
-                                            mep = celf_sequence.pop(0)
+                                            mep_g = celf_sequence.pop(0)
                                             mep_k_prod, mep_i_node, mep_flag = mep_g[0], mep_g[1], mep_g[3]
                                             if mep_i_node == '-1':
                                                 break
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                                                         celf_sequence.pop()
                                                         break
 
-                                        mep = celf_sequence.pop(0)
+                                        mep_g = celf_sequence.pop(0)
                                         mep_k_prod, mep_i_node, mep_flag = mep_g[0], mep_g[1], mep_g[3]
 
                                     s_matrix = [copy.deepcopy(s_matrix) for _ in range(num_product)]
